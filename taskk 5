@@ -1,0 +1,170 @@
+# -*- coding: utf-8 -*-
+
+phone_book = {
+    "Коваленко": "050-123-4567",
+    "Петренко": "067-234-5678",
+    "Шевченко": "063-345-6789",
+    "Бондаренко": "095-456-7890",
+    "Кравченко": "066-567-8901",
+    "Олійник": "093-678-9012",
+    "Ткаченко": "096-789-0123",
+    "Мельник": "097-890-1234",
+    "Гриценко": "098-901-2345",
+    "Лисенко": "099-012-3456"
+}
+
+def print_all(book):
+    """Функція виведення всіх значень словника"""
+    print("\n" + "=" * 40)
+    print("ТЕЛЕФОННИЙ ДОВІДНИК")
+    print("=" * 40)
+    
+    if not book:
+        print("Довідник порожній!")
+        return
+    
+    for name, phone in book.items():
+        print(f"{name:<15} - {phone}")
+    print("=" * 40)
+
+def add_entry(book):
+    """Функція додавання нового запису до словника"""
+    print("\n--- ДОДАВАННЯ НОВОГО ЗАПИСУ ---")
+    
+    name = input("Введіть прізвище: ").strip()
+    if not name:
+        print("Помилка: прізвище не може бути порожнім!")
+        return
+    
+    if name in book:
+        print(f"Увага: запис для {name} вже існує!")
+        overwrite = input("Замінити? (так/ні): ").strip().lower()
+        if overwrite != 'так':
+            print("Додавання скасовано.")
+            return
+    
+    phone = input("Введіть номер телефону (формат: XXX-XXX-XXXX): ").strip()
+    if not phone:
+        print("Помилка: номер телефону не може бути порожнім!")
+        return
+    
+    book[name] = phone
+    print(f"✓ Запис для {name} успішно додано!")
+
+def delete_entry(book):
+    """Функція видалення запису зі словника"""
+    print("\n--- ВИДАЛЕННЯ ЗАПИСУ ---")
+    
+    if not book:
+        print("Довідник порожній - немає що видаляти!")
+        return
+    
+    name = input("Введіть прізвище для видалення: ").strip()
+    
+    if name in book:
+        confirm = input(f"Ви впевнені, що хочете видалити {name}? (так/ні): ").strip().lower()
+        if confirm == 'так':
+            del book[name]
+            print(f"✓ Запис для {name} успішно видалено!")
+        else:
+            print("Видалення скасовано.")
+    else:
+        print(f"✗ Запис для {name} не знайдено!")
+
+def print_sorted(book):
+    """Функція перегляду вмісту словника за відсортованими ключами"""
+    print("\n--- ДОВІДНИК ЗА ВІДСОРТОВАНИМИ КЛЮЧАМИ ---")
+    
+    if not book:
+        print("Довідник порожній!")
+        return
+    
+    sorted_book = dict(sorted(book.items()))
+
+    print("\n" + "=" * 40)
+    print("ВІДСОРТОВАНИЙ ДОВІДНИК")
+    print("=" * 40)
+    
+    for name, phone in sorted_book.items():
+        print(f"{name:<15} - {phone}")
+    print("=" * 40)
+
+def search_by_name(book):
+    """Функція пошуку телефону за прізвищем"""
+    print("\n--- ПОШУК ТЕЛЕФОНУ ЗА ПРІЗВИЩЕМ ---")
+    
+    name = input("Введіть прізвище для пошуку: ").strip()
+    
+    if name in book:
+        print(f"✓ Номер телефону для {name}: {book[name]}")
+    else:
+        print(f"✗ {name} не знайдено в довіднику")
+
+def search_by_phone(book):
+    """Функція пошуку людини за номером телефону"""
+    print("\n--- ПОШУК ЛЮДИНИ ЗА НОМЕРОМ ТЕЛЕФОНУ ---")
+    
+    phone = input("Введіть номер телефону для пошуку: ").strip()
+    
+    found = False
+    for name, number in book.items():
+        if number == phone:
+            print(f"✓ Номер телефону {phone} належить {name}")
+            found = True
+            break
+    
+    if not found:
+        print(f"✗ Номер телефону {phone} не знайдено в довіднику")
+
+def show_menu():
+    """Функція відображення меню"""
+    print("\n" + "=" * 50)
+    print("ТЕЛЕФОННИЙ ДОВІДНИК - ГОЛОВНЕ МЕНЮ")
+    print("=" * 50)
+    print("1. Вивести всі записи довідника")
+    print("2. Додати новий запис")
+    print("3. Видалити запис")
+    print("4. Переглянути довідник за відсортованими ключами")
+    print("5. Пошук телефону за прізвищем")
+    print("6. Пошук людини за номером телефону")
+    print("0. Вийти з програми")
+    print("=" * 50)
+
+def main():
+    """Головна функція програми"""
+    global phone_book
+    
+    while True:
+        show_menu()
+        
+        try:
+            choice = input("\nВиберіть пункт меню (0-6): ").strip()
+            
+            if choice == '0':
+                print("\nДякую за використання програми. До побачення!")
+                break
+            elif choice == '1':
+                print_all(phone_book)
+            elif choice == '2':
+                add_entry(phone_book)
+            elif choice == '3':
+                delete_entry(phone_book)
+            elif choice == '4':
+                print_sorted(phone_book)
+            elif choice == '5':
+                search_by_name(phone_book)
+            elif choice == '6':
+                search_by_phone(phone_book)
+            else:
+                print("Помилка: невірний вибір. Спробуйте ще раз.")
+            
+            input("\nНатисніть Enter для продовження...")
+        
+        except KeyboardInterrupt:
+            print("\n\nПрограму перервано. До побачення!")
+            break
+        except Exception as e:
+            print(f"\nСталася помилка: {e}")
+
+if __name__ == "__main__":
+    main()
